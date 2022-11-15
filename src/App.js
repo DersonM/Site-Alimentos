@@ -1,23 +1,41 @@
-import logo from './logo.svg';
-import './App.css';
+
+import React, {useEffect, useState }from "react";
+import './style.css';
+
+//https://sujeitoprogramador.com/rn-api/?api=posts
 
 function App() {
+  const [food, setFood] = useState([]);
+
+  useEffect(()=> {
+    function carregarApi(){
+      let url = 'https://sujeitoprogramador.com/rn-api/?api=posts';
+
+      fetch(url)
+      .then((resultadoRequisiçãoURL) => resultadoRequisiçãoURL.json())
+      .then((json) => {
+        
+        setFood(json);
+      })
+    }
+    carregarApi();
+  }, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <div className="container">
+      <header>
+        <strong>React Food</strong>
       </header>
+      {food.map((itensdaAPI)=>{
+        return(
+          <article key={itensdaAPI.id} className='post'>
+            <strong className="titulo">{itensdaAPI.titulo}</strong>
+                <img src={itensdaAPI.capa} 
+                alt={itensdaAPI.titulo}className='capa'/>
+                <p className="subtitulo">{itensdaAPI.subtitulo}</p>
+                <a className="botao">Acessar</a>
+          </article>
+        )
+      })}
     </div>
   );
 }
